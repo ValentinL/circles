@@ -8,13 +8,13 @@ int GLScene::Init( )
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);			// set black color to clear screen
 
-	v=boost::shared_ptr< ObjectsPool<Circle> >(new ObjectsPool<Circle>(_w,_h));	//make cirsles pool
+	v=std::tr1::shared_ptr< ObjectsPool<Circle> >(new ObjectsPool<Circle>(_w,_h));	//make cirsles pool
 	ReSizeGLScene(_w,_h);										
 	return true;                
 };
 
 
-void GLScene::setFont( boost::shared_ptr<GLFont> font)	
+void GLScene::setFont( std::tr1::shared_ptr<GLFont> font)	
 {
 	_font=font;
 };
@@ -66,11 +66,11 @@ void GLScene::Draw()
 	MoveObjects(v,_h,_w);
 
 	glColor3f(1,1,1);
-	glRasterPos2f(0.0, _h);
+	glRasterPos2f(0.0, (GLfloat)_h);
 	_font->glPrint("Scores: %d", TotalScore);  // Печать текста GL на экран
 };
 
-void GLScene::MouseClick(int MouseXPos,int MouseYPos)
+void GLScene::MouseClick(float MouseXPos,float MouseYPos)
 {
 	ObjectsPool<Circle>::iterator it=ShotInObject(v,MouseXPos,MouseYPos);
 	

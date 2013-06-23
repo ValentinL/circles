@@ -241,6 +241,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\non_copyable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ObjectsPool.hpp"
 				>
 			</File>

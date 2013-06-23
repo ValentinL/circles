@@ -3,7 +3,7 @@
 #include <functional>
 
 template <>
-void MoveObjects<Circle>(const boost::shared_ptr< ObjectsPool<Circle> >& v,size_t scene_height,size_t scene_width)
+void MoveObjects<Circle>(const std::tr1::shared_ptr< ObjectsPool<Circle> >& v,size_t scene_height,size_t scene_width)
 {
 	for(ObjectsPool<Circle>::iterator it=v->begin();it!=v->end();++it)
 	{

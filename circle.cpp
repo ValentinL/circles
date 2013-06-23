@@ -1,6 +1,6 @@
 #include "circle.h"	
 
-Circle::Circle(float r,float x,float y,size_t numPoints,size_t Scores,size_t Velocity):_r(r),center(x,y),Shape(numPoints,Scores,Velocity)
+Circle::Circle(float r,float x,float y,size_t numPoints,size_t Scores,float Velocity):_r(r),center(x,y),Shape(numPoints,Scores,Velocity)
 {
 	init();
 }
@@ -11,7 +11,7 @@ void Circle::init()
 	float delta=2*PI/DefaultNumPoints;
 	
 	//set circle's points
-	for(int i=0;i<points.size();i+=2,alpha+=delta)
+	for(size_t i=0;i<points.size();i+=2,alpha+=delta)
 	{
 		points[i]	=center.first+_r*std::cos(alpha);
 		points[i+1] =center.second+_r*std::sin(alpha);

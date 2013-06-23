@@ -14,7 +14,7 @@ private:
 public:
 	explicit Circle(float r,float x,float y,size_t numPoints=DefaultNumPoints,
 											size_t Scores=DefaultScores,
-											size_t Velocity=DefaultVelocity);
+											float Velocity=DefaultVelocity);
 
 	//generates new parameters for the circle
 	void setCircle(float r,float x,float y,size_t numPoints=DefaultNumPoints);

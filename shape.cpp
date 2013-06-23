@@ -1,7 +1,7 @@
 #include "shape.h"
 
 
-Shape::Shape(size_t numPoints,size_t Scores,size_t Velocity):_numPoints(numPoints),_DefaultScores(Scores),_DefaultVelocity(Velocity),points(_numPoints*2)
+Shape::Shape(size_t numPoints,size_t Scores,float Velocity):_numPoints(numPoints),_DefaultScores(Scores),_DefaultVelocity(Velocity),points(_numPoints*2)
 {};
 
 size_t Shape::getNumPoints() const
@@ -22,7 +22,7 @@ const color& Shape::getColor() const
 
 void Shape::Move()
 {	
-	for(int i=0;i<points.size();i+=2)
+	for(size_t i=0;i<points.size();i+=2)
 		points[i+1]+=vel;
 }
 

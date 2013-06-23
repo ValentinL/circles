@@ -1,7 +1,6 @@
 #ifndef _CIRCLES_POOL_H_
 #define _CIRCLES_POOL_H_
-#include <boost/shared_ptr.hpp>
-#include <boost/functional.hpp>
+#include <memory>
 #include "ObjectsPool.hpp"
 #include "Circle.h"
 
@@ -36,7 +35,7 @@ public:
 
 
 template <>
-void MoveObjects<Circle>(const boost::shared_ptr< ObjectsPool<Circle> >& v,size_t scene_height,size_t scene_width);
+void MoveObjects<Circle>(const std::tr1::shared_ptr< ObjectsPool<Circle> >& v,size_t scene_height,size_t scene_width);
 
 
 #endif

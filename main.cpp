@@ -1,6 +1,5 @@
 #include <ctime>
-#include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <memory>
 
 #include "screen.h"
 #include "constants.h"
@@ -10,15 +9,16 @@
 #include "OGLDevice.h"
 #include "GLFont.h"
 #include "GLScene.h"
+#include "non_copyable.h"
 
 #pragma comment (lib,"opengl32.lib")
 #pragma comment (lib,"glu32.lib")
 
 //our GLWindow class
-class myGLWindow: private boost::noncopyable,public cWindow
+class myGLWindow: private NonCopyable,public cWindow
 {
 private:
-	boost::shared_ptr<GLScene> _scene;	
+	std::tr1::shared_ptr<GLScene> _scene;	
 	bool isActive;						//window activity flag
 public:
 	myGLWindow()
@@ -31,7 +31,7 @@ public:
 		AddMessage(WM_ACTIVATE,this,&myGLWindow::OnActivate);
 	}
 
-	void setScene(boost::shared_ptr<GLScene> scene)
+	void setScene(std::tr1::shared_ptr<GLScene> scene)
 	{
 		_scene=scene;
 	}
@@ -85,11 +85,12 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
  {
 
 	srand(time(NULL));				//set random number generator					
-	boost::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
-	boost::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
-	boost::shared_ptr<GLScene>		scene(new GLScene);		//openGL scene
-	boost::shared_ptr<GLFont>		font(new GLFont);		
+	std::tr1::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
+	std::tr1::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
+	std::tr1::shared_ptr<GLScene>		scene(new GLScene);		//openGL scene
+	std::tr1::shared_ptr<GLFont>		font(new GLFont);		
 
+	
 	try
 	{
 		wnd->setScene(scene);		//set scene into window
@@ -110,7 +111,7 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 
 		SetTimer(wnd->getHandle(),1,17,NULL);		
 		
-		boost::shared_ptr<WinApplication> app(new WinApplication); 		//run appliction
+		std::tr1::shared_ptr<WinApplication> app(new WinApplication); 		//run appliction
 		app->Run();
 		
 	}

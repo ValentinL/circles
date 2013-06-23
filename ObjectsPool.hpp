@@ -6,13 +6,16 @@ and appear in a new location
 
 #ifndef _OBJECTS_POOL_HPP_
 #define _OBJECTS_POOL_HPP_
-#include <boost/utility.hpp>
-#include <vector>
 
+#include "non_copyable.h"
+#include <memory>
+#include <vector>
+#include <functional>
+#include <algorithm>
 
 //base part of pool
 template <typename T>
-class _ObjectsPool:private boost::noncopyable
+class _ObjectsPool:private NonCopyable
 {
 protected:
 	std::vector<T> v;
@@ -77,16 +80,16 @@ class ObjectsPool:public _ObjectsPool<T>
 
 //template function for move objects in pool
 template <typename T>
-void MoveObjects(const boost::shared_ptr< ObjectsPool<T> >& v,size_t scene_height,size_t scene_width);
+void MoveObjects(const std::tr1::shared_ptr< ObjectsPool<T> >& v,size_t scene_height,size_t scene_width);
 
 //function searches for the hit point in the circle
 template <typename T>
 typename ObjectsPool<T>::iterator 
-ShotInObject(const boost::shared_ptr< ObjectsPool<T> >& v,size_t x,size_t y)
+ShotInObject(const std::tr1::shared_ptr< ObjectsPool<T> >& v,float x,float y)
 {
 	//find from end of vector, for  correct destroy shape
 	std::vector<T>::reverse_iterator it= std::find_if(v.get()->rbegin(),v.get()->rend(),
-												boost::bind2nd(boost::ptr_fun(InShape<T>), point(x,y)));
+													std::tr1::bind(&InShape<T>, std::tr1::placeholders::_1,point(x,y)));
 	if(it!=v.get()->rend())
 		return --it.base();
 	else

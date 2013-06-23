@@ -17,7 +17,7 @@ protected:
 	float _DefaultVelocity;
 	size_t _DefaultScores;
 public:
-	explicit Shape(size_t numPoints,size_t Scores=DefaultScores, size_t Velocity=DefaultVelocity);
+	explicit Shape(size_t numPoints,size_t Scores=DefaultScores, float Velocity=DefaultVelocity);
 	
 	size_t getNumPoints() const;
 

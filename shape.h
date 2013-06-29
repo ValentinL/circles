@@ -20,7 +20,7 @@ public:
 	explicit Shape(size_t numPoints,size_t Scores=DefaultScores, float Velocity=DefaultVelocity);
 	
 	size_t getNumPoints() const;
-
+	float getVelocity() const;
 	const float* getPoints() const;
 	size_t getScores() const;
 	const color& getColor() const;

@@ -40,7 +40,7 @@ void GLScene::ReSizeGLScene(  GLsizei width,  GLsizei height )        // change 
 
 
 
-void GLScene::Draw()
+void GLScene::Draw(float interpolation)
 {
 	glClear( GL_COLOR_BUFFER_BIT );		//clear color buffer
 
@@ -49,25 +49,29 @@ void GLScene::Draw()
 	for(ObjectsPool<Circle>::const_iterator it=v->begin();it!=v->end();++it)
 	{
 
-		glColor3f(it->getColor().r,it->getColor().g,it->getColor().b);
-		glVertexPointer(2, GL_FLOAT, 0,  it->getPoints() );
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, it->getNumPoints());
-		glDisableClientState(GL_VERTEX_ARRAY);
-
 		//glColor3f(it->getColor().r,it->getColor().g,it->getColor().b);
-		//glBegin(GL_TRIANGLE_FAN);
-		//	const float* p=it->getPoints(); 
-		//	for(size_t i=0;i<it->getNumPoints()*2;i+=2)
-		//		glVertex2f(p[i],p[i+1]);
-		//glEnd();
+		//glVertexPointer(2, GL_FLOAT, 0,  it->getPoints() );
+		//glEnableClientState(GL_VERTEX_ARRAY);
+		//glDrawArrays(GL_TRIANGLE_FAN, 0, it->getNumPoints());
+		//glDisableClientState(GL_VERTEX_ARRAY);
+		
+		glColor3f(it->getColor().r,it->getColor().g,it->getColor().b);
+		glBegin(GL_TRIANGLE_FAN);
+			const float* p=it->getPoints(); 
+			float velocity=it->getVelocity()*interpolation;
+			for(size_t i=0;i<it->getNumPoints()*2;i+=2)
+				glVertex2f(p[i],p[i+1]+velocity);
+		glEnd();
 	}
-
-	MoveObjects(v,_h,_w);
 
 	glColor3f(1,1,1);
 	glRasterPos2f(0.0, (GLfloat)_h);
 	_font->glPrint("Scores: %d", TotalScore);  // Печать текста GL на экран
+};
+
+void GLScene::Update()
+{
+	MoveObjects(v,_h,_w);
 };
 
 void GLScene::MouseClick(float MouseXPos,float MouseYPos)

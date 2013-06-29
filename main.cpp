@@ -20,13 +20,13 @@ class myGLWindow: private NonCopyable,public cWindow
 private:
 	std::tr1::shared_ptr<GLScene> _scene;	
 	bool isActive;						//window activity flag
+	bool game_is_running;
 public:
-	myGLWindow()
+	myGLWindow():game_is_running(true)
 	{
 		//register messages and handlers
 		AddMessage(WM_DESTROY,this,&myGLWindow::OnDestroy);
 		AddMessage(WM_SIZE,this,&myGLWindow::OnResize);
-		AddMessage(WM_TIMER,this,&myGLWindow::OnTimer);
 		AddMessage(WM_LBUTTONDOWN,this,&myGLWindow::OnMouseClick);
 		AddMessage(WM_ACTIVATE,this,&myGLWindow::OnActivate);
 	}
@@ -47,6 +47,7 @@ public:
 
 	LRESULT OnDestroy(LPARAM lparam,WPARAM wparam)
 	{
+		game_is_running=false;
 		PostQuitMessage(0);
 		return 0;
 	}
@@ -60,22 +61,52 @@ public:
 	}
    
 
-	LRESULT OnTimer(LPARAM lparam,WPARAM wparam)
-	{
-		if(isActive)					//if program is active
-		{
-			_scene->Draw();				//draw a picture
-			OGLDevice::SwapBuffers();
-		}
-		return 0;
-	}
-
 	LRESULT OnMouseClick(LPARAM lparam,WPARAM wparam)
 	{
 		_scene->MouseClick(LOWORD(lparam),HIWORD(lparam));
 		return 0;
 	}
 
+	void GameLoop()
+	{
+
+		//I made a game cycle as described in article 
+		//http://habrahabr.ru/post/136878/
+
+		DWORD next_game_tick = GetTickCount() ;
+		float interpolation;
+
+		MSG msg;
+
+		while(game_is_running)
+		{
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+			else
+			{
+				if(isActive)
+				{
+					int loops = 0;
+					while( GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
+						_scene->Update();
+						next_game_tick += SKIP_TICKS;
+						loops++;
+					}
+
+					interpolation = (float( GetTickCount() + SKIP_TICKS - next_game_tick )
+									/ float( SKIP_TICKS ));
+					_scene->Draw(interpolation);
+					OGLDevice::SwapBuffers();
+				}
+				else
+					next_game_tick = GetTickCount();
+			}
+		}
+
+	}
 	~myGLWindow()	{};
  };
 
@@ -86,9 +117,9 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 
 	srand(time(NULL));				//set random number generator					
 	std::tr1::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
-	std::tr1::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
+	std::tr1::shared_ptr<OGLDevice>		Device(new OGLDevice);	//openGL device
 	std::tr1::shared_ptr<GLScene>		scene(new GLScene);		//openGL scene
-	std::tr1::shared_ptr<GLFont>		font(new GLFont);		
+	std::tr1::shared_ptr<GLFont>		font(new GLFont);	
 
 	
 	try
@@ -106,14 +137,9 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 
 		scene->setFont(font);						//set font into scene
 		font->BuildFont(wnd->getHandle());			
-
 		scene->Init();							
 
-		SetTimer(wnd->getHandle(),1,17,NULL);		
-		
-		std::tr1::shared_ptr<WinApplication> app(new WinApplication); 		//run appliction
-		app->Run();
-		
+		wnd->GameLoop();							//start game loop
 	}
 	catch(std::exception& ex)
 	{

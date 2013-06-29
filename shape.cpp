@@ -7,6 +7,8 @@ Shape::Shape(size_t numPoints,size_t Scores,float Velocity):_numPoints(numPoints
 size_t Shape::getNumPoints() const
 {	return _numPoints;	};
 
+float Shape::getVelocity() const
+{	return vel;};
 
 const float* Shape::getPoints() const
 {	

@@ -22,7 +22,9 @@ public:
 
 	void ReSizeGLScene( GLsizei width,  GLsizei height  );        // change size 
 
-	void Draw(); 
+	void Draw(float interpolation); 
+
+	void Update();
 
 	void MouseClick(float MouseXPos,float MouseYPos);
 };

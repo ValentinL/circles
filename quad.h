@@ -27,12 +27,12 @@ public:
 class QuadFactory :public ShapeFactory
 {
 public:
-	virtual Shape* createShape(size_t w, size_t h)
+	virtual std::shared_ptr<Shape> createShape(size_t w, size_t h)
 	{
 		size_t base = (w<h) ? w : h;
 		float a = FloatRand(base / MinRadiusDelim, base / MaxRadiusDelim);
 		float left = FloatRand(0, w);
-		return new Quad(point(left,-a),point( left+a,0));
+		return std::make_shared<Quad>(point(left,-a),point( left+a,0));
 	}
 };
 

@@ -5,11 +5,12 @@
 #include "Circle.h"
 #include "Quad.h"
 #include <map>
-//specialization for object's pool 
-//for Shape*
+//specialization object's pool for Shape*
+//typedef Shape* shape_ptr;
+typedef std::shared_ptr<Shape> shape_ptr;
 
 template <>
-class ObjectsPool<Shape*>:public _ObjectsPool<Shape*>
+class ObjectsPool<shape_ptr>:public _ObjectsPool<shape_ptr>
 {
 public:
 
@@ -17,8 +18,8 @@ public:
 	explicit ObjectsPool(size_t w,size_t h,size_t NumObjects=DefaultNumObjects)
 	{
 		Registry reg;
-		reg.RegistryNew(new  CircleFactory());
-		reg.RegistryNew(new  QuadFactory());
+		reg.RegistryNew(std::make_shared<CircleFactory>());
+		reg.RegistryNew(std::make_shared<QuadFactory>());
 		for(size_t i=0;i<NumObjects;i++)
 		{
 			size_t base=(w<h)?w:h;
@@ -29,7 +30,7 @@ public:
 	};
 
 	//do not remove the object, but simply give the new coordinates
-	void ResetObject( size_t w,size_t h,ObjectsPool<Shape*>::iterator it )
+	void ResetObject(size_t w, size_t h, ObjectsPool<shape_ptr>::iterator it)
 	{
 		(*it)->ResetShape(w, h);
 	};
@@ -37,10 +38,10 @@ public:
 
 
 template <>
-void MoveObjects<>(std::shared_ptr<ObjectsPool<Shape*>>& v, size_t scene_height, size_t scene_width);
+void MoveObjects<>(std::shared_ptr<ObjectsPool<shape_ptr>>& v, size_t scene_height, size_t scene_width);
 
 //function searches for the hit point in the circle
-ObjectsPool<Shape*>::iterator
-ShotInObject(const std::shared_ptr<ObjectsPool<Shape*>>& v, float x, float y);
+ObjectsPool<shape_ptr>::iterator
+ShotInObject(const std::shared_ptr<ObjectsPool<shape_ptr>>& v, float x, float y);
 
 #endif

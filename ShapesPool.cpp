@@ -3,7 +3,7 @@
 #include <functional>
 
 template <>
-void MoveObjects<>(std::shared_ptr<ObjectsPool<Shape*>>& v,size_t scene_height,size_t scene_width)
+void MoveObjects<>(std::shared_ptr<ObjectsPool<shape_ptr>>& v, size_t scene_height, size_t scene_width)
 {
 	for(auto it= v->begin();it!=v->end();++it)
 	{
@@ -14,15 +14,13 @@ void MoveObjects<>(std::shared_ptr<ObjectsPool<Shape*>>& v,size_t scene_height,s
 	}
 }
 
-
 //function searches for the hit point in the circle
-ObjectsPool<Shape*>::iterator
-ShotInObject(const std::shared_ptr<ObjectsPool<Shape*>>& v, float x, float y)
+ObjectsPool<shape_ptr>::iterator
+ShotInObject(const std::shared_ptr<ObjectsPool<shape_ptr>>& v, float x, float y)
 {
 	//find from end of vector, for  correct destroy shape
-
 	auto it = std::find_if(v.get()->rbegin(), v.get()->rend(),
-		std::bind2nd(std::mem_fun(&Shape::PointInShape), point(x, y)));
+		std::bind(&Shape::PointInShape, std::placeholders::_1, point(x, y)));
 
 	if (it != v.get()->rend())
 		return --it.base();

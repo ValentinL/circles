@@ -28,11 +28,11 @@ public:
 class CircleFactory:public ShapeFactory
 {
 public:
-	virtual Shape* createShape(size_t w, size_t h)
+	virtual std::shared_ptr<Shape> createShape(size_t w, size_t h)
 	{
 		size_t base = (w<h) ? w : h;
 		float r = FloatRand(base / MinRadiusDelim, base / MaxRadiusDelim);
-		return new Circle(r, FloatRand(r, w - r), r);
+		return std::make_shared<Circle>(r, FloatRand(r, w - r), r);
 	}
 };
 

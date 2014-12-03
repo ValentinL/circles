@@ -18,7 +18,7 @@
 class myGLWindow: private NonCopyable,public cWindow
 {
 private:
-	std::tr1::shared_ptr<GLScene> _scene;	
+	std::shared_ptr<GLScene<>> _scene;
 	bool isActive;						//window activity flag
 	bool game_is_running;
 public:
@@ -31,7 +31,7 @@ public:
 		AddMessage(WM_ACTIVATE,this,&myGLWindow::OnActivate);
 	}
 
-	void setScene(std::tr1::shared_ptr<GLScene> scene)
+	void setScene(std::shared_ptr<GLScene<>> scene)
 	{
 		_scene=scene;
 	}
@@ -116,10 +116,10 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
  {
 
 	srand(time(NULL));				//set random number generator					
-	std::tr1::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
-	std::tr1::shared_ptr<OGLDevice>		Device(new OGLDevice);	//openGL device
-	std::tr1::shared_ptr<GLScene>		scene(new GLScene);		//openGL scene
-	std::tr1::shared_ptr<GLFont>		font(new GLFont);	
+	std::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
+	std::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
+	std::shared_ptr<GLScene<>>	scene(new GLScene<>);	//openGL scene
+	std::shared_ptr<GLFont>		font(new GLFont);	
 
 	
 	try

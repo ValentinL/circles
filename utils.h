@@ -3,6 +3,7 @@
 #include <utility>
 #include <cstdlib>
 #include <vector>
+#include <memory>
 
 typedef std::pair<float,float>			point;
 typedef std::vector<point>				point_vector;

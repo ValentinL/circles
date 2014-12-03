@@ -5,6 +5,7 @@
 #include <gl\glu.h> 
 #include "utils.h"
 
+//Strategy to drawing shapes
 class ShapeDrawing
 {
 public:

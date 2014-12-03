@@ -103,6 +103,7 @@
     <ClInclude Include="application.h" />
     <ClInclude Include="circle.h" />
     <ClInclude Include="quad.h" />
+    <ClInclude Include="ShapeDrawing.h" />
     <ClInclude Include="ShapesPool.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="GLFont.h" />

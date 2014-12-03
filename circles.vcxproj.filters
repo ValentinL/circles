@@ -95,5 +95,8 @@
     <ClInclude Include="quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShapeDrawing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

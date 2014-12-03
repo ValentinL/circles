@@ -1,6 +1,7 @@
 #include "GLScene.h"
 #include <gl\gl.h>               
 #include <gl\glu.h> 
+#include "ShapeDrawing.h"
 
 GLScene::GLScene(int NumObjects):TotalScore(0){}
 
@@ -48,16 +49,10 @@ void GLScene::Draw(float interpolation)
 	glClear( GL_COLOR_BUFFER_BIT );		//clear color buffer
 
 	//draw objects
+	auto drawer = new WinOpenGlDrawing1();
 	for(ObjectsPool<Shape*>::const_iterator it=v->begin();it!=v->end();++it)
 	{
-/*		glColor3f((*it)->getColor().r, (*it)->getColor().g, (*it)->getColor().b);
-		glBegin(GL_TRIANGLE_FAN);
-		const float* p = (*it)->getPoints();
-		float velocity = (*it)->getVelocity()*interpolation;
-		for (size_t i = 0; i<(*it)->getNumPoints() * 2; i += 2)
-				glVertex2f(p[i],p[i+1]+velocity);
-		glEnd();*/
-		(*it)->Draw(interpolation);
+		(*it)->Draw (drawer, interpolation);
 	}
 
 	glColor3f(1,1,1);

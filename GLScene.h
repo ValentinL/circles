@@ -10,8 +10,7 @@ class GLScene:private NonCopyable
 {
 private:
 	size_t _w,_h;
-	std::tr1::shared_ptr<GLFont> _font;				//font
-	//std::tr1::shared_ptr< ObjectsPool<Circle> > v;		//our circles
+	std::shared_ptr< GLFont > _font;				//font
 	std::shared_ptr< ObjectsPool<Shape*> > v;		//our shapes
 
 

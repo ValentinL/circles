@@ -24,7 +24,7 @@ void Circle::init()
 
 }
 
-void Circle::ResetShape(float w, float h)
+void Circle::ResetShape(size_t w, size_t h)
 {
 	size_t base = (w<h) ? w : h;
 	float r = FloatRand(base / MinRadiusDelim, base / MaxRadiusDelim);
@@ -66,26 +66,9 @@ bool Circle::PointInShape(const point& p) const
 	return false;
 }
 
-
-void Circle::Draw(float interpolation) const 
-{
-	glColor3f(_c.r,_c.g,_c.b);
-	glBegin(GL_TRIANGLE_FAN);
-	float velocity = vel*interpolation;
-	for (size_t i = 0; i < points.size(); i += 2)
-		glVertex2f(points[i], points[i + 1] + velocity);
-	glEnd();
-}
-
-
 bool Circle::ShapeInScreen(float width, float height) const
 {
 	if ((center.second - _r) > height) return true;
 	return false;
 }
 
-//template <> bool ShapeInScreen<>(const Circle* s, float width, float height)
-//{
-//	if (((s->getCenter().second) - s->getRadius()) > height) return true;
-//	return false;
-//}

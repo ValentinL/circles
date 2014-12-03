@@ -20,8 +20,7 @@ ObjectsPool<Shape*>::iterator
 ShotInObject(const std::shared_ptr<ObjectsPool<Shape*>>& v, float x, float y)
 {
 	//find from end of vector, for  correct destroy shape
-	//std::vector<T>::reverse_iterator it= std::find_if(v.get()->rbegin(),v.get()->rend(),
-	//												std::tr1::bind(&InShape<T>, std::tr1::placeholders::_1,point(x,y)));
+
 	auto it = std::find_if(v.get()->rbegin(), v.get()->rend(),
 		std::bind2nd(std::mem_fun(&Shape::PointInShape), point(x, y)));
 

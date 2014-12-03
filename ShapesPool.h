@@ -2,13 +2,12 @@
 #define _SHAPES_POOL_H_
 #include <memory>
 #include "ObjectsPool.hpp"
-#include "Shape.h"
 #include "Circle.h"
 #include "Quad.h"
-
+#include <map>
 //specialization for object's pool 
-//for Circle
-//
+//for Shape*
+
 template <>
 class ObjectsPool<Shape*>:public _ObjectsPool<Shape*>
 {
@@ -17,16 +16,14 @@ public:
 	//make a pool of Shapes
 	explicit ObjectsPool(size_t w,size_t h,size_t NumObjects=DefaultNumObjects)
 	{
-		CircleFactory* circle_factory = new  CircleFactory();
-		QuadFactory*   quad_factory   = new  QuadFactory();
+		Registry reg;
+		reg.RegistryNew(new  CircleFactory());
+		reg.RegistryNew(new  QuadFactory());
 		for(size_t i=0;i<NumObjects;i++)
 		{
 			size_t base=(w<h)?w:h;
 			float r=FloatRand(base/MinRadiusDelim,base/MaxRadiusDelim);
-			if (i%2)
-				v.push_back(circle_factory->createShape(w,h));
-			else
-				v.push_back(quad_factory->createShape(w,h));
+			v.push_back(reg(i % 2, w, h));
 		}
 
 	};

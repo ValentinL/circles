@@ -17,9 +17,8 @@ public:
 								size_t Scores = DefaultScores,
 								float Velocity = DefaultVelocity);
 
-	virtual void Draw(float interpolation) const;
 	virtual void Move(float x, float y, float z = 0);
-	virtual void ResetShape(float w, float h);
+	virtual void ResetShape(size_t w, size_t h);
 	virtual bool PointInShape(const point& p) const;
 	virtual bool ShapeInScreen(float width, float height) const;
 };

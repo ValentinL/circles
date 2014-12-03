@@ -2,11 +2,10 @@
 #define _SHAPE_H_
 #include <vector>
 #include <memory>
-#include <Windows.h>
-#include <gl\gl.h>               
-#include <gl\glu.h> 
+#include <map>
 #include "utils.h"
 #include "constants.h"
+#include "ShapeDrawing.h"
 
 //class represents a common part of shapes
 class Shape
@@ -25,9 +24,9 @@ public:
 	const color& getColor() const;
 
 	virtual bool PointInShape(const point& p) const = 0;
-	virtual void Draw(float interpolation) const = 0;
+	virtual void Draw(ShapeDrawing* d, float interpolation) const = 0;
 	virtual void Move(float x,float y,float z) = 0;
-	virtual void ResetShape(float w, float h) = 0;
+	virtual void ResetShape(size_t w, size_t h) = 0;
 	virtual bool ShapeInScreen(float width, float height) const = 0;
 	virtual ~Shape();
 };
@@ -45,6 +44,12 @@ public:
 			points[i] += x;
 		}
 	}
+
+	void Draw(ShapeDrawing* d, float interpolation) const
+	{
+		float delta = vel*interpolation;
+		d->Draw(&points[0], &points[0]+points.size() , _c, delta);
+	}
 };
 
 class ShapeFactory
@@ -54,8 +59,23 @@ public:
 	virtual ~ShapeFactory() {}
 };
 
+//for easy create scene
+class Registry
+{
+private:
 
-//template <class T>
-//bool ShapeInScreen(const T s, float width, float height);
+	std::map<int, ShapeFactory*> Reg;
+public:
+	Shape* operator()(int number, int w, int h)
+	{
+		return Reg[number]->createShape(w, h);
+	}
+
+	void RegistryNew(ShapeFactory* f)
+	{
+		Reg.insert(std::make_pair(Reg.size(), f));
+	}
+};
+
 
 #endif

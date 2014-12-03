@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "shape.h"
 
-class Circle:public Shape
+class Circle:public Shape2D
 {
 private:
 	float _r;			//circle radius
@@ -16,19 +16,25 @@ public:
 											size_t Scores=DefaultScores,
 											float Velocity=DefaultVelocity);
 
-	//generates new parameters for the circle
-	void setCircle(float r,float x,float y,size_t numPoints=DefaultNumPoints);
 	point getCenter() const;	
-	float getRadius() const;
-
-	//move circle down
-	void Move();
+	float getRadius() const; 
+	virtual void Draw(float interpolation) const;
+	virtual void Move(float x, float y, float z = 0);
+	virtual void ResetShape(float w,float h);
+	virtual bool PointInShape(const point& p) const;
+	virtual bool ShapeInScreen(float width, float height) const;
 };
 
 
-//specialization of function template InShape
-//determines whether the point of the circle
-template <>
-bool InShape<Circle>(const Circle& c, const point& p);
+class CircleFactory:public ShapeFactory
+{
+public:
+	virtual Shape* createShape(size_t w, size_t h)
+	{
+		size_t base = (w<h) ? w : h;
+		float r = FloatRand(base / MinRadiusDelim, base / MaxRadiusDelim);
+		return new Circle(r, FloatRand(r, w - r), r);
+	}
+};
 
 #endif

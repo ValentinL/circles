@@ -1,6 +1,7 @@
 #include "circle.h"	
 
-Circle::Circle(float r,float x,float y,size_t numPoints,size_t Scores,float Velocity):_r(r),center(x,y),Shape(numPoints,Scores,Velocity)
+
+Circle::Circle(float r,float x,float y,size_t numPoints,size_t Scores,float Velocity):_r(r),center(x,y),Shape2D(numPoints,Scores,Velocity)
 {
 	init();
 }
@@ -23,13 +24,16 @@ void Circle::init()
 
 }
 
-void Circle::setCircle(float r,float x,float y,size_t numPoints)
+void Circle::ResetShape(float w, float h)
 {
-	_r=r;
-	center.first=x;
-	center.second=y;
+	size_t base = (w<h) ? w : h;
+	float r = FloatRand(base / MinRadiusDelim, base / MaxRadiusDelim);
+	_r = r;
+	center.first = FloatRand(r, w - r);
+	center.second = -r;
 	init();
 }
+
 
 point Circle::getCenter() const
 {
@@ -41,25 +45,47 @@ float Circle::getRadius() const
 	return _r;
 }
 
-void Circle::Move()
+void Circle::Move(float x,float y,float z)
 {
-	Shape::Move();		//move all points
-	center.second+=vel;	//move center of circle
+	Shape2D::Move(x,y,z);		//move all points
+	center.first += x;
+	center.second+= y;		//move center of circle
 }
 
-
-template <>
-bool InShape<Circle>(const Circle& c, const point& p)
+bool Circle::PointInShape(const point& p) const
 {
 	//if the distance between the center and point less than the radius
 	//then point belongs to the circle
-	float x=p.first-c.getCenter().first;
-	float y=p.second-c.getCenter().second;
+	float x = p.first - center.first;
+	float y = p.second - center.second;
 
-	float dist=std::sqrt(x*x+y*y);
-	if(dist<c.getRadius())
+	float dist = std::sqrt(x*x + y*y);
+	if (dist<_r)
 		return true;
 
 	return false;
 }
 
+
+void Circle::Draw(float interpolation) const 
+{
+	glColor3f(_c.r,_c.g,_c.b);
+	glBegin(GL_TRIANGLE_FAN);
+	float velocity = vel*interpolation;
+	for (size_t i = 0; i < points.size(); i += 2)
+		glVertex2f(points[i], points[i + 1] + velocity);
+	glEnd();
+}
+
+
+bool Circle::ShapeInScreen(float width, float height) const
+{
+	if ((center.second - _r) > height) return true;
+	return false;
+}
+
+//template <> bool ShapeInScreen<>(const Circle* s, float width, float height)
+//{
+//	if (((s->getCenter().second) - s->getRadius()) > height) return true;
+//	return false;
+//}

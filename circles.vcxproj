@@ -88,7 +88,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="circle.cpp" />
-    <ClCompile Include="CirclesPool.cpp" />
+    <ClCompile Include="quad.cpp" />
+    <ClCompile Include="ShapesPool.cpp" />
     <ClCompile Include="GLFont.cpp" />
     <ClCompile Include="GLScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -101,7 +102,8 @@
   <ItemGroup>
     <ClInclude Include="application.h" />
     <ClInclude Include="circle.h" />
-    <ClInclude Include="CirclesPool.h" />
+    <ClInclude Include="quad.h" />
+    <ClInclude Include="ShapesPool.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="GLFont.h" />
     <ClInclude Include="GLScene.h" />

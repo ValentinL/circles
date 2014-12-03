@@ -2,7 +2,8 @@
 #define _GL_SCENE_H
 #include <memory>
 #include "GLFont.h"
-#include "CirclesPool.h"
+#include "ShapesPool.h"
+#include "shape.h"
 #include "non_copyable.h"
 
 class GLScene:private NonCopyable
@@ -10,7 +11,10 @@ class GLScene:private NonCopyable
 private:
 	size_t _w,_h;
 	std::tr1::shared_ptr<GLFont> _font;				//font
-	std::tr1::shared_ptr< ObjectsPool<Circle> > v;		//our circles
+	//std::tr1::shared_ptr< ObjectsPool<Circle> > v;		//our circles
+	std::shared_ptr< ObjectsPool<Shape*> > v;		//our shapes
+
+
 	size_t TotalScore;								
 public:
 

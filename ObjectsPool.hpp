@@ -26,9 +26,6 @@ public:
 	typedef typename std::vector<T>::reverse_iterator reverse_iterator;
 	typedef typename std::vector<T>::const_reverse_iterator const_reverse_iterator;
 
-	virtual void ResetObject(size_t w,size_t h,iterator it)=0;
-
-
 	iterator begin()
 	{
 		return v.begin();
@@ -74,26 +71,13 @@ public:
 
 //class for specialization
 template <typename T>
-class ObjectsPool:public _ObjectsPool<T>
+class ObjectsPool :public _ObjectsPool<T>
 {
 };
 
 //template function for move objects in pool
 template <typename T>
-void MoveObjects(const std::tr1::shared_ptr< ObjectsPool<T> >& v,size_t scene_height,size_t scene_width);
+void MoveObjects(std::shared_ptr<ObjectsPool<T>>& v,size_t scene_height,size_t scene_width);
 
-//function searches for the hit point in the circle
-template <typename T>
-typename ObjectsPool<T>::iterator 
-ShotInObject(const std::tr1::shared_ptr< ObjectsPool<T> >& v,float x,float y)
-{
-	//find from end of vector, for  correct destroy shape
-	std::vector<T>::reverse_iterator it= std::find_if(v.get()->rbegin(),v.get()->rend(),
-													std::tr1::bind(&InShape<T>, std::tr1::placeholders::_1,point(x,y)));
-	if(it!=v.get()->rend())
-		return --it.base();
-	else
-		return v.get()->end();
-}
 
 #endif

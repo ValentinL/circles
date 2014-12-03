@@ -8,7 +8,10 @@ int GLScene::Init( )
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);			// set black color to clear screen
 
-	v=std::tr1::shared_ptr< ObjectsPool<Circle> >(new ObjectsPool<Circle>(_w,_h));	//make cirsles pool
+	//v=std::tr1::shared_ptr< ObjectsPool<Circle> >(new ObjectsPool<Circle>(_w,_h));	//make cirsles pool
+	v = std::shared_ptr< ObjectsPool<Shape*> >(new ObjectsPool<Shape*>(_w, _h));	//make cirsles pool
+
+
 	ReSizeGLScene(_w,_h);										
 	return true;                
 };
@@ -44,24 +47,17 @@ void GLScene::Draw(float interpolation)
 {
 	glClear( GL_COLOR_BUFFER_BIT );		//clear color buffer
 
-
 	//draw objects
-	for(ObjectsPool<Circle>::const_iterator it=v->begin();it!=v->end();++it)
+	for(ObjectsPool<Shape*>::const_iterator it=v->begin();it!=v->end();++it)
 	{
-
-		//glColor3f(it->getColor().r,it->getColor().g,it->getColor().b);
-		//glVertexPointer(2, GL_FLOAT, 0,  it->getPoints() );
-		//glEnableClientState(GL_VERTEX_ARRAY);
-		//glDrawArrays(GL_TRIANGLE_FAN, 0, it->getNumPoints());
-		//glDisableClientState(GL_VERTEX_ARRAY);
-		
-		glColor3f(it->getColor().r,it->getColor().g,it->getColor().b);
+/*		glColor3f((*it)->getColor().r, (*it)->getColor().g, (*it)->getColor().b);
 		glBegin(GL_TRIANGLE_FAN);
-			const float* p=it->getPoints(); 
-			float velocity=it->getVelocity()*interpolation;
-			for(size_t i=0;i<it->getNumPoints()*2;i+=2)
+		const float* p = (*it)->getPoints();
+		float velocity = (*it)->getVelocity()*interpolation;
+		for (size_t i = 0; i<(*it)->getNumPoints() * 2; i += 2)
 				glVertex2f(p[i],p[i+1]+velocity);
-		glEnd();
+		glEnd();*/
+		(*it)->Draw(interpolation);
 	}
 
 	glColor3f(1,1,1);
@@ -71,16 +67,17 @@ void GLScene::Draw(float interpolation)
 
 void GLScene::Update()
 {
+	
 	MoveObjects(v,_h,_w);
 };
 
 void GLScene::MouseClick(float MouseXPos,float MouseYPos)
 {
-	ObjectsPool<Circle>::iterator it=ShotInObject(v,MouseXPos,MouseYPos);
+	auto it=ShotInObject(v,MouseXPos,MouseYPos);
 	
-	if(it!=v->end())
+	if ( it != v->end())
 	{
-		TotalScore+=it->getScores();
-		v->ResetObject(_w,_h,it);
+		TotalScore += (*it)->getScores();
+		v->ResetObject(_w, _h, it);
 	}
 }

@@ -70,7 +70,11 @@ private:
 public:
 	std::shared_ptr<Shape> operator()(int number, int w, int h)
 	{
-		return Reg[number]->createShape(w, h);
+		auto it = Reg.find(number);
+		if (it != Reg.end())
+			return it->second->createShape(w, h);
+		else
+			throw std::bad_function_call("Unexcpected shape");
 	}
 
 	void RegistryNew(const std::shared_ptr<ShapeFactory>& f)

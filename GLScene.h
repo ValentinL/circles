@@ -7,14 +7,17 @@
 #include "shape.h"
 #include "non_copyable.h"
 
+//base Scene
 class Scene
 {
 protected:
 	size_t _w, _h;
+	size_t TotalScore;
 public:
+	Scene():TotalScore(0){};
 	virtual int Init() = 0;
-	virtual void setFont(std::shared_ptr<GLFont> font) = 0;
-	virtual void ReSizeGLScene(GLsizei width, GLsizei height) = 0;        // change size 
+	virtual void setFont(const std::shared_ptr<Font>& font) = 0;
+	virtual void ReSizeScene(int width, int height) = 0;        // change size 
 	
 	virtual void Draw(float interpolation) = 0;
 	virtual void Update() = 0;
@@ -22,50 +25,46 @@ public:
 
 };
 
+//Windows OpenGL Scene
 template <typename T = ObjectsPool<std::shared_ptr<Shape>> >
 class GLScene:public Scene,private NonCopyable
 {
 private:
-	size_t TotalScore;
-	std::shared_ptr< GLFont > _font;				//font
-	std::shared_ptr< T >  v;		//our shapes
+	std::shared_ptr< GLFont > _font;	//font
+	std::shared_ptr< T >  v;			//our shapes
 public:
 
 	GLScene(int NumObjects=DefaultNumObjects);
+	int Init();                
 
-	int Init( );                
-
-	void setFont( std::shared_ptr<GLFont> font);
-
-	void ReSizeGLScene( GLsizei width,  GLsizei height  );        // change size 
+	void setFont(const std::shared_ptr<Font>& font);
+	void ReSizeScene(int width, int height);        // change size 
 
 	void Draw(float interpolation); 
-
 	void Update();
-
 	void MouseClick(float MouseXPos,float MouseYPos);
 };
 
 
-template <typename T> GLScene<T>::GLScene(int NumObjects):TotalScore(0){}
+template <typename T> GLScene<T>::GLScene(int NumObjects):Scene(){}
 
 template <typename T>
 int GLScene<T>::Init()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);			// set black color to clear screen
 	v = std::make_shared<T>(_w, _h);	//make cirsles pool
-	ReSizeGLScene(_w, _h);
+	ReSizeScene(_w, _h);
 	return true;
 };
 
 template <typename T>
-void GLScene<T>::setFont(std::shared_ptr<GLFont> font)
+void GLScene<T>::setFont(const std::shared_ptr<Font>& font)
 {
-	_font = font;
+	_font = std::dynamic_pointer_cast<GLFont>(font);
 };
 
 template <typename T>
-void GLScene<T>::ReSizeGLScene(GLsizei width, GLsizei height)        // change size and init GL
+void GLScene<T>::ReSizeScene(int width, int height)        // change size and init GL
 {
 
 	if (height == 0)

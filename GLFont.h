@@ -3,15 +3,21 @@
 #include <windows.h>
 #include <gl\gl.h>               
 #include <gl\glu.h> 
+class Font
+{
+public:
+	virtual void BuildFont(HWND hwnd) = 0;
+	virtual ~Font(){};
+};
 
-class GLFont
+class GLFont:public Font
 {
 private:
 	GLuint  base;      // font's base
 public:
-	GLvoid BuildFont(HWND hwnd); 
-	GLvoid Release(GLvoid);
-	GLvoid glPrint(const char *fmt, ...);
+	void BuildFont(HWND hwnd); 
+	void Release(GLvoid);
+	void glPrint(const char *fmt, ...);
 	~GLFont();
 };
 

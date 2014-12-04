@@ -18,7 +18,7 @@
 class myGLWindow: private NonCopyable,public cWindow
 {
 private:
-	std::shared_ptr<GLScene<>> _scene;
+	std::shared_ptr<Scene> _scene;
 	bool isActive;						//window activity flag
 	bool game_is_running;
 public:
@@ -31,7 +31,7 @@ public:
 		AddMessage(WM_ACTIVATE,this,&myGLWindow::OnActivate);
 	}
 
-	void setScene(std::shared_ptr<GLScene<>> scene)
+	void setScene(std::shared_ptr<Scene> scene)
 	{
 		_scene=scene;
 	}
@@ -56,7 +56,7 @@ public:
 	LRESULT OnResize(LPARAM lparam,WPARAM wparam)
 	{
 		this->changeSize();										//change window size
-		_scene->ReSizeGLScene(LOWORD(lparam), HIWORD(lparam));	//resize
+		_scene->ReSizeScene(LOWORD(lparam), HIWORD(lparam));	//resize
 		return 0;
 	}
    
@@ -116,17 +116,19 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
  {
 
 	srand(time(NULL));				//set random number generator					
+
 	std::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
 	std::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
-	std::shared_ptr<GLScene<>>	scene(new GLScene<>);	//openGL scene
-	std::shared_ptr<GLFont>		font(new GLFont);	
+	std::shared_ptr<Scene>		scene(new GLScene<>);	//openGL scene
+	std::shared_ptr<Font>		font(new GLFont);	
+	
 
 	
 	try
 	{
 		wnd->setScene(scene);		//set scene into window
 									//create window
-		
+
 		wnd->Create(0,L"Circles",0,WS_OVERLAPPEDWINDOW|WS_VISIBLE,Screen::getInstance().getWidth()/8,
 																  Screen::getInstance().getHeight()/8,
 																  Screen::getInstance().getWidth()*0.75,

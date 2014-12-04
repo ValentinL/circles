@@ -5,18 +5,35 @@
 class Screen
 {
 private:
-	int _width,_height;
+	int _width, _height;
+	static Screen* _self;
 	Screen();
 	Screen(const Screen& root);
 	Screen& operator=(const Screen&);
+	virtual ~Screen(){}
 public:
-	static const Screen& getInstance()
+	static Screen* getInstance()
 	{
-		 static Screen ScreenInstance;
-         return ScreenInstance;
+		if (!_self)
+			_self = new Screen();
+		return _self;
 	}
+
+	static bool DeleteInstance()
+	{
+		if (_self)
+		{
+			delete _self;
+			_self = 0;
+			return true;
+		}
+		return false;
+	}
+
 	size_t getWidth() const;
 	size_t getHeight() const;
 };
+
+
 
 #endif

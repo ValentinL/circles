@@ -1,6 +1,8 @@
 #include "screen.h"
 #include <windows.h>
 
+Screen* Screen::_self = 0;
+
 Screen::Screen()
 {
 	HDC hDCScreen = GetDC(NULL);

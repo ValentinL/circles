@@ -14,7 +14,7 @@ void MoveObjects<>(std::shared_ptr<ObjectsPool<shape_ptr>>& v, size_t scene_heig
 	}
 }
 
-//function searches for the hit point in the circle
+//function searches for the hit point in the shape
 ObjectsPool<shape_ptr>::iterator
 ShotInObject(const std::shared_ptr<ObjectsPool<shape_ptr>>& v, float x, float y)
 {

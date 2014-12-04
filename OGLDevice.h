@@ -1,8 +1,10 @@
 #ifndef _OGLDEVICE_H_
 #define _OGLDEVICE_H_
 #include <windows.h>
+class RenderDevice{ };
 
-class	OGLDevice{
+class	OGLDevice:public RenderDevice
+{
 	//OpenGL context
 	HGLRC hGLrc;
 	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC) (int interval);

@@ -55,7 +55,7 @@ public:
 
 	LRESULT OnResize(LPARAM lparam,WPARAM wparam)
 	{
-		this->changeSize();										//change window size
+		changeSize();										//change window size
 		_scene->ReSizeScene(LOWORD(lparam), HIWORD(lparam));	//resize
 		return 0;
 	}
@@ -118,10 +118,10 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 	srand(time(NULL));				//set random number generator					
 
 	std::shared_ptr<myGLWindow>	wnd(new myGLWindow);	//window
-	std::shared_ptr<OGLDevice>	Device(new OGLDevice);	//openGL device
-	std::shared_ptr<Scene>		scene(new GLScene<>);	//openGL scene
-	std::shared_ptr<Font>		font(new GLFont);	
-	
+	std::shared_ptr<OGLDevice>	Device(new OGLDevice);	//render device
+	std::shared_ptr<Scene>		scene(new GLScene<>);	//scene
+	std::shared_ptr<Font>		font(new GLFont);		//font
+	Screen*	scr = Screen::getInstance();
 
 	
 	try
@@ -129,12 +129,12 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 		wnd->setScene(scene);		//set scene into window
 									//create window
 
-		wnd->Create(0,L"Circles",0,WS_OVERLAPPEDWINDOW|WS_VISIBLE,Screen::getInstance().getWidth()/8,
-																  Screen::getInstance().getHeight()/8,
-																  Screen::getInstance().getWidth()*0.75,
-																  Screen::getInstance().getHeight()*0.75,0);
+		wnd->Create(0,L"Circles",0,WS_OVERLAPPEDWINDOW|WS_VISIBLE,scr->getWidth()/8,
+																  scr->getHeight()/8,
+																  scr->getWidth()*0.75,
+																  scr->getHeight()*0.75,0);
 		
-		Device->CreateDevice( wnd->getHandle() );				//set openGL device into window
+		Device->CreateDevice( wnd->getHandle() );	//set openGL device into window
 		Device->setVsync(false);					//off V-sync
 
 		scene->setFont(font);						//set font into scene
@@ -142,6 +142,10 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 		scene->Init();							
 
 		wnd->GameLoop();							//start game loop
+	}
+	catch (std::bad_typeid& ex)
+	{
+		MessageBoxA(0, ex.what(), "Error", MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch(std::exception& ex)
 	{
@@ -151,5 +155,6 @@ int APIENTRY WinMain(HINSTANCE hinst,HINSTANCE prev,LPSTR cmd,int showcmd)
 	{
 		MessageBoxA( 0, "Uncatched exception", "Error", MB_OK | MB_ICONEXCLAMATION); 
 	}
+	scr->DeleteInstance;
 	return 0;
  }

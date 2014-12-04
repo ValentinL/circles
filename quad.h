@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "shape.h"
 
+//just test quad. Need class convex polygon before quad
 class Quad:public Shape2D
 {
 private:

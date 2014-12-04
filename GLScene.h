@@ -25,7 +25,7 @@ public:
 
 };
 
-//Windows OpenGL Scene
+//OpenGL Scene
 template <typename T = ObjectsPool<std::shared_ptr<Shape>> >
 class GLScene:public Scene,private NonCopyable
 {

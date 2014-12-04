@@ -74,7 +74,7 @@ public:
 		if (it != Reg.end())
 			return it->second->createShape(w, h);
 		else
-			throw std::bad_function_call("Unexcpected shape");
+			throw std::bad_typeid("Unexpected shape type");
 	}
 
 	void RegistryNew(const std::shared_ptr<ShapeFactory>& f)
